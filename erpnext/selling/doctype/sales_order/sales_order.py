@@ -77,6 +77,11 @@ class SalesOrder(SellingController):
 				where item_code = %s and warehouse = %s", (d.item_code,d.warehouse))
 			d.projected_qty = tot_avail_qty and flt(tot_avail_qty[0][0]) or 0
 
+			if d.projected_qty < 0 and not frappe.get_value("Warehouse", bin.warehouse, "manufactura"):
+				frappe.throw("""Cantidad Proyectada negativa.
+					<br>Es Probable que el Almacen: {warehouse} no tenga la cantidad requerida 
+					<br>o que ya este reservada para una Sucursal para el Articulo: {item_code}""".format(**d.as_dict()))
+
 		# check for same entry multiple times
 		unique_chk_list = set(check_list)
 		if len(unique_chk_list) != len(check_list) and \

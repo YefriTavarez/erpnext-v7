@@ -66,7 +66,7 @@ class Item(WebsiteGenerator):
 		if not self.description:
 			self.description = self.item_name
 
-		self.validate_uom()
+		# self.validate_uom()
 		self.add_default_uom_in_conversion_factor_table()
 		self.validate_conversion_factor()
 		self.validate_item_type()

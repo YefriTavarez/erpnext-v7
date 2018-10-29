@@ -1568,7 +1568,7 @@
  "issingle": 0, 
  "istable": 0, 
  "max_attachments": 0, 
- "modified": "2016-11-07 05:08:23.746175", 
+ "modified": "2017-10-10 11:36:33.413834", 
  "modified_by": "Administrator", 
  "module": "Stock", 
  "name": "Stock Entry", 
@@ -1576,7 +1576,7 @@
  "permissions": [
   {
    "amend": 1, 
-   "apply_user_permissions": 0, 
+   "apply_user_permissions": 1, 
    "cancel": 1, 
    "create": 1, 
    "delete": 1, 
