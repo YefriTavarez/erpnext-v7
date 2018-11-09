@@ -329,17 +329,21 @@ def make_supplier_quotation(source_name, target_doc=None):
 
 @frappe.whitelist()
 def make_stock_entry(source_name, target_doc=None):
-	def update_item(obj, target, source_parent):
-		qty = flt(obj.qty) - flt(obj.ordered_qty) \
-			if flt(obj.qty) > flt(obj.ordered_qty) else 0
-		target.qty = qty
-		target.transfer_qty = qty
-		target.conversion_factor = 1
+	def update_item(source, target, source_parent):
+
+		qty = flt(source.qty) - flt(source.ordered_qty) \
+			if flt(source.qty) > flt(source.ordered_qty) else 0
+		target.qty = source.get("confirmed_qty") or source.get("current_qty")
+		target.uom = source.current_uom
+		target.transfer_qty = target.qty * source.conversion_factor
+		target.stock_uom = source.uom
+		# target.basic_rate = source.uom
+		target.conversion_factor = source.conversion_factor
 
 		if source_parent.material_request_type == "Material Transfer":
-			target.t_warehouse = obj.warehouse
+			target.t_warehouse = source.warehouse
 		else:
-			target.s_warehouse = obj.warehouse
+			target.s_warehouse = source.warehouse
 
 	def set_missing_values(source, target):
 		target.purpose = source.material_request_type
@@ -358,7 +362,11 @@ def make_stock_entry(source_name, target_doc=None):
 			"field_map": {
 				"name": "material_request_item",
 				"parent": "material_request",
-				"uom": "stock_uom",
+				"stock_uom": "uom",
+				"transfer_qty":	"qty",
+				# "qty": "current_qty",
+				"uom": "current_uom",
+				"conversion_factor": "conversion_factor",
 			},
 			"postprocess": update_item,
 			"condition": lambda doc: doc.ordered_qty < doc.qty

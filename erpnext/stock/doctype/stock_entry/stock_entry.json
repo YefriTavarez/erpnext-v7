@@ -743,6 +743,7 @@
    "unique": 0
   }, 
   {
+   "allow_bulk_edit": 1, 
    "allow_on_submit": 0, 
    "bold": 0, 
    "collapsible": 0, 
@@ -1568,7 +1569,7 @@
  "issingle": 0, 
  "istable": 0, 
  "max_attachments": 0, 
- "modified": "2017-10-10 11:36:33.413834", 
+ "modified": "2018-11-02 11:16:20.355931", 
  "modified_by": "Administrator", 
  "module": "Stock", 
  "name": "Stock Entry", 
@@ -1652,7 +1653,7 @@
    "print": 1, 
    "read": 1, 
    "report": 1, 
-   "role": "Stock Manager", 
+   "role": "Administrador del almacen Principal", 
    "set_user_permissions": 0, 
    "share": 1, 
    "submit": 1, 
