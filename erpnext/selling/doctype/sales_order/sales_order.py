@@ -77,11 +77,6 @@ class SalesOrder(SellingController):
 				where item_code = %s and warehouse = %s", (d.item_code,d.warehouse))
 			d.projected_qty = tot_avail_qty and flt(tot_avail_qty[0][0]) or 0
 
-			if d.projected_qty < 0 and not frappe.get_value("Warehouse", bin.warehouse, "manufactura"):
-				frappe.throw("""Cantidad Proyectada negativa.
-					<br>Es Probable que el Almacen: {warehouse} no tenga la cantidad requerida 
-					<br>o que ya este reservada para una Sucursal para el Articulo: {item_code}""".format(**d.as_dict()))
-
 		# check for same entry multiple times
 		unique_chk_list = set(check_list)
 		if len(unique_chk_list) != len(check_list) and \
@@ -447,7 +442,7 @@ def make_sales_invoice(source_name, target_doc=None, ignore_permissions=False):
 		target.amount = flt(source.amount) - flt(source.billed_amt)
 		target.base_amount = target.amount * flt(source_parent.conversion_rate)
 		target.qty = target.amount / flt(source.rate) if (source.rate and source.billed_amt) else source.qty
-		
+
 		item = frappe.db.get_value("Item", target.item_code, ["item_group", "selling_cost_center"], as_dict=1)
 		target.cost_center = frappe.db.get_value("Project", source_parent.project, "cost_center") \
 			or item.selling_cost_center \
